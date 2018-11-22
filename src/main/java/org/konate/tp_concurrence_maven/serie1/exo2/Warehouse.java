@@ -11,10 +11,10 @@ public class Warehouse {
 	
 	
 	public boolean isFull() {
-		return state>capacity ? true:false;
+		return capacity==state;
 	}
 	public boolean isEmpty() {
-		return state != 0 ? true : false;
+		return state==0;
 	}
 	
 	public int getCapacity() {
@@ -44,7 +44,7 @@ public class Warehouse {
 	}
 	
 	public int content() {
-		return capacity - state;
+		return state;
 		
 	}
 	
