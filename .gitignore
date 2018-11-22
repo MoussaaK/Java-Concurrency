@@ -1,0 +1,7 @@
+/target/
+.classpath
+.project
+/.settings/
+/TPs XML/
+/Tests XML/
+/bin/
