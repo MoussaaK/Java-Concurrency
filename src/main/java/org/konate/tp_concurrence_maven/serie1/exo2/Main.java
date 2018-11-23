@@ -1,7 +1,11 @@
 package org.konate.tp_concurrence_maven.serie1.exo2;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Main {
 
@@ -39,14 +43,26 @@ public class Main {
 				/*executorS.execute(producer);
 				executorS.execute(producer);
 				Thread.sleep(10);*/
+		List<Future<?>> futures = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			executorS.execute(producer);
+			futures.add(executorS.submit(producer));
 		}
 		
 		for (int i = 0; i < 95; i++) {
-			executorS.execute(consumer);
+			Thread t = new Thread(consumer);
+			t.start();
+			t.join();
 		}
-		Thread.sleep(10);
+		
+		futures.forEach(t->{
+			try {
+				t.get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		//Thread.sleep(10);
 		System.out.println("Wharehouse's State : " + warehouse.content());
 		
 		//Runnable task = null;
