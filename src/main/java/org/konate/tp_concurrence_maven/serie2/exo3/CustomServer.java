@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,9 +21,10 @@ public class CustomServer {
 	public static void main(String[] args) throws IOException {
 
 		server = new ServerSocket(8080);
-		
+
 		int processors = Runtime.getRuntime().availableProcessors();
-		ExecutorService service = Executors.newFixedThreadPool(processors-2);
+		ExecutorService service = Executors.newFixedThreadPool(processors);
+		ConcurrentHashMap<String, Integer> orders = new ConcurrentHashMap<>();
 
 		while (true) {
 			System.out.println("Listening to request");
@@ -32,7 +34,7 @@ public class CustomServer {
 			Callable<?> response = () -> {
 				InputStream inputStream = socket.getInputStream();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
+				String[] items = null;
 				OutputStream outputStream = socket.getOutputStream();
 				PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream));
 				String order = null;
@@ -49,18 +51,24 @@ public class CustomServer {
 					} else if (order.equals("bye")) {
 						System.out.printf("Closing connection\n");
 						socket.close();
+					} else if (order.startsWith("PUT")) {
+						writer.printf("Received PUT order : %s\n", order);
+						writer.flush();
+						System.out.printf("Received PUT order : %s\n", order);
+						orders.put(order.split(" ")[1], Integer.parseInt(order.split(" ")[2]));
+					} else if (order.startsWith("LIST")) {
+						writer.printf("Received PUT order : %s\n", order);
+						writer.flush();
+						orders.forEach((k, v) -> writer.printf("Item Name : %s, Price : %d", k, v));
+						//writer.flush();
 					}
-					
 					order = reader.readLine();
-					
 				}
-				return order;
+				return items;
 			};
-			
+
 			service.submit(response);
-			
-			
+			service.shutdown();
 		}
-		
 	}
 }

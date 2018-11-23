@@ -25,7 +25,7 @@ public class Client {
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
-
+       
         while (!"bye".equals(command)) {
 
             System.out.println("Sending command = " + command);
@@ -40,7 +40,7 @@ public class Client {
         }
         writer.println(command);
         writer.flush();
-        scanner.close();
-        socket.close();
+        //scanner.close();
+        //socket.close();
     }
 }
