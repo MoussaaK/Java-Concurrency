@@ -67,6 +67,7 @@ public class Main {
 		
 		//Runnable task = null;
 		//service.execute(task);
+		executorS.shutdown();
 	}
 
 }
