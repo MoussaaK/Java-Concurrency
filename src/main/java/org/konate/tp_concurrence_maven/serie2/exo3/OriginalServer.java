@@ -10,11 +10,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class OriginalServer {
 
-    public static void main(String[] args) throws IOException {
+    private static ServerSocket server;
 
-        ServerSocket server = new ServerSocket(8080);
+	public static void main(String[] args) throws IOException {
+
+        server = new ServerSocket(8080);
 
         while (true) {
             System.out.println("Listening to request");
