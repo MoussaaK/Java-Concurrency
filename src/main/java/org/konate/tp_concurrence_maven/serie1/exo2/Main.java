@@ -5,23 +5,52 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-	public static void main(String[] args) {
-		Warehouse warehouse = new Warehouse(10);
+	public static void main(String[] args) throws InterruptedException {
+		int capacity = 10;
+		Warehouse warehouse = new Warehouse(capacity);
 		
-		Runnable add = () -> warehouse.add();
-		Runnable remove = () -> warehouse.remove();
+		Runnable producer = () -> {
+			try {
+				warehouse.add("Caisse");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		};
+		Runnable consumer = () -> {
+			try {
+				warehouse.remove();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		};
 	
-		System.out.println("State before add = " + warehouse.getState());
-		System.out.println("Capacity = " + warehouse.getCapacity());
-		add.run();
-		System.out.println("State after add = " + warehouse.getState());
+		/*System.out.println("State before add = " + warehouse.content());
+		System.out.println("Capacity = " + capacity);
+		producer.run();
+		System.out.println("State after add = " + warehouse.content());
 		
-		remove.run();
-		System.out.println("state after remove = " + warehouse.getState());
+		consumer.run();
+		System.out.println("state after remove = " + warehouse.content());*/
+	
+		//producer.run();
+		ExecutorService executorS = Executors.newFixedThreadPool(4);
+				/*executorS.execute(producer);
+				executorS.execute(producer);
+				Thread.sleep(10);*/
+		for (int i = 0; i < 100; i++) {
+			executorS.execute(producer);
+		}
 		
-		ExecutorService service = Executors.newFixedThreadPool(100);
-		Runnable task = null;
-		service.execute(task);
+		for (int i = 0; i < 95; i++) {
+			executorS.execute(consumer);
+		}
+		Thread.sleep(10);
+		System.out.println("Wharehouse's State : " + warehouse.content());
+		
+		//Runnable task = null;
+		//service.execute(task);
 	}
 
 }
