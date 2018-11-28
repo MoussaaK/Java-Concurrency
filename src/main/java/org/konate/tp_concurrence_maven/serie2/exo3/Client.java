@@ -12,35 +12,35 @@ import java.util.Scanner;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        Socket socket = new Socket("localhost", 8080);
+		Socket socket = new Socket("localhost", 8080);
 
-        InputStream inputStream = socket.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		InputStream inputStream = socket.getInputStream();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        OutputStream outputStream = socket.getOutputStream();
-        PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream));
+		OutputStream outputStream = socket.getOutputStream();
+		PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream));
 
-        System.out.print("> ");
-        Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
-       
-        while (!"bye".equals(command)) {
+		System.out.print("> ");
+		Scanner scanner = new Scanner(System.in);
+		String command = scanner.nextLine();
 
-            System.out.println("Sending command = " + command);
-            writer.println(command);
-            writer.flush();
+		while (!"bye".equals(command)) {
 
-            String answer = reader.readLine();
-            System.out.println("Got answer = " + answer);
+			System.out.println("Sending command = " + command);
+			writer.println(command);
+			writer.flush();
 
-            System.out.print("> ");
-            command = scanner.nextLine();
-        }
-        writer.println(command);
-        writer.flush();
-        //scanner.close();
-        //socket.close();
-    }
+			String answer = reader.readLine();
+			System.out.println("Got answer = " + answer);
+
+			System.out.print("> ");
+			command = scanner.nextLine();
+		}
+		writer.println(command);
+		writer.flush();
+		//scanner.close();
+		//socket.close();
+	}
 }
