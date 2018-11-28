@@ -9,9 +9,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -76,15 +73,18 @@ public class CustomServer {
 					} else if (order.startsWith("BUY")) {
 						writer.printf("Product number %s purchased successfully\n", order.split(" ")[1]);
 						writer.flush();
-						orders.remove(order.split(" ")[1]);
+						//orders.remove(order.split(" ")[1]);
+						products.remove(Long.parseLong(order.split(" ")[1]));
 						
 					} else if (order.startsWith("CREATE")) {
 						Product product = new Product(order.split(" ")[1], ++ID);
 						products.put(product.getId(), product);
-						writer.printf("CREATED %lg\n", product.getId());
+						writer.printf("Received CREATE order : %s\n", order);
 						writer.flush();
+						//writer.printf("CREATED %d\n", product.getId());
 						
 					} else if (order.startsWith("PRICE")) {
+						writer.printf("Received PRICE order : %s\n", order);
 						Product product = products.get(Long.parseLong(order.split(" ")[1]));
 						product.setPrice(Double.parseDouble(order.split(" ")[2]));
 						

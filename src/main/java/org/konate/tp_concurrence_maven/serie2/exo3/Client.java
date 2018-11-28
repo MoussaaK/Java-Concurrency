@@ -40,7 +40,7 @@ public class Client {
 		}
 		writer.println(command);
 		writer.flush();
-		//scanner.close();
-		//socket.close();
+		scanner.close();
+		socket.close();
 	}
 }
